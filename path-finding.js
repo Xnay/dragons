@@ -1,6 +1,4 @@
-const fromDirectons = require("./directions");
-
-const directions = fromDirectons.directions;
+const directions = require("./directions/directions");
 
 /**
  * Both from and to are Points.
@@ -15,7 +13,7 @@ function pathFinding(map, from, to) {
 
     if (Math.abs(distX) > Math.abs(distY)) {
         if (distX > 0) {
-            move = 
+            //move =
         }
     }
 }
