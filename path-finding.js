@@ -7,8 +7,8 @@ const directionsEnum = require("./directions/directions-enum");
  */
 function pathFinding(map, from, to) {
     // Lets start with an eucledian distance
-    const distX = from.col - to.col;
-    const distY = from.row - to.row;
+    const distX = from.x - to.x;
+    const distY = from.y - to.y;
 
     let move;
 

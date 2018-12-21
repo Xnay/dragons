@@ -68,9 +68,8 @@ function parseBoard(board) {
 
     return map;
 }
-
 // The predicate takes a tile(neighbor) returns false if this neightbor is not wanted.
-function getNeightbors(map, currentPos, predicate) {
+/*function getNeightbors(map, currentPos, predicate) {
     var neighbors = [];
 
     for (const direction of directions) {
@@ -88,69 +87,106 @@ function getValidNeighbors(map, currentPos) {
         currentPos,
         tile => tile && tile.type == Types.Nothing
     );
+}*/
+
+function isWalkable(tile) {
+    return tile && tile.type === Types.Nothing;
 }
 
-function getValidDirections(map, currentPos) {
-    var validDirections = [];
-    for (const direction of directions) {
-        const tileInDirection = getTileAtPosition(map, currentPos, direction);
-        if (tileInDirection && tileInDirection.type == Types.Nothing) {
-            validDirections.push(direction);
-        }
+function getValidNeighbors(map, currentPos) {
+    var validNeighbors = [];
+    var print = new Array(3);
+    print[0] = new Array(3);
+    print[1] = new Array(3);
+    print[2] = new Array(3);
+    print[0][0] = "E";
+    print[1][1] = "P";
+    print[0][2] = "E";
+    print[2][0] = "E";
+    print[2][2] = "E";
+    var north = getTileAtPosition(map, currentPos, directionsEnum.NORTH);
+    if (isWalkable(north)) {
+        validNeighbors.push(north);
+        print[0][1] = "O";
+    } else {
+        print[0][1] = "X";
     }
-    return validDirections;
+    var west = getTileAtPosition(map, currentPos, directionsEnum.WEST);
+    if (isWalkable(west)) {
+        validNeighbors.push(west);
+        print[1][0] = "O";
+    } else {
+        print[1][0] = "X";
+    }
+    var east = getTileAtPosition(map, currentPos, directionsEnum.EAST);
+    if (isWalkable(east)) {
+        validNeighbors.push(east);
+        print[1][2] = "O";
+    } else {
+        print[1][2] = "X";
+    }
+    var south = getTileAtPosition(map, currentPos, directionsEnum.SOUTH);
+    if (isWalkable(south)) {
+        validNeighbors.push(south);
+        print[2][1] = "O";
+    } else {
+        print[2][1] = "X";
+    }
+
+    //console.log(currentPos);
+    //console.log(print);
+
+    return validNeighbors;
 }
 
 function getTileAtPosition(map, currentPos, direction) {
     if (direction === directionsEnum.NORTH) {
-        if (currentPos.row <= 0) {
+        if (currentPos.x <= 0) {
             return null;
         }
         return new Tile(
-            currentPos.row - 1,
-            currentPos.col,
-            map[currentPos.row - 1][currentPos.col]
+            currentPos.x - 1,
+            currentPos.y,
+            map[currentPos.x - 1][currentPos.y]
         );
     } else if (direction === directionsEnum.SOUTH) {
-        if (currentPos.row >= map.length) {
+        if (currentPos.x >= map.length) {
             return null;
         }
         return new Tile(
-            currentPos.row + 1,
-            currentPos.col,
-            map[currentPos.row + 1][currentPos.col]
+            currentPos.x + 1,
+            currentPos.y,
+            map[currentPos.x + 1][currentPos.y]
         );
     } else if (direction === directionsEnum.EAST) {
-        if (currentPos.col >= map.length) {
+        if (currentPos.y >= map.length) {
             return null;
         }
         return new Tile(
-            currentPos.row,
-            currentPos.col + 1,
-            map[currentPos.row][currentPos.col + 1]
+            currentPos.x,
+            currentPos.y + 1,
+            map[currentPos.x][currentPos.y + 1]
         );
     } else if (direction === directionsEnum.WEST) {
-        if (currentPos.col <= 0) {
+        if (currentPos.y <= 0) {
             return null;
         }
         return new Tile(
-            currentPos.row,
-            currentPos.col - 1,
-            map[currentPos.row][currentPos.col - 1]
+            currentPos.x,
+            currentPos.y - 1,
+            map[currentPos.x][currentPos.y - 1]
         );
     } else if (direction === directionsEnum.STAY) {
         return new Tile(
-            currentPos.row,
-            currentPos.col,
-            map[currentPos.row][currentPos.col]
+            currentPos.x,
+            currentPos.y,
+            map[currentPos.x][currentPos.y]
         );
     }
 }
 
 module.exports = {
     parseBoard,
-    getNeightbors,
     getValidNeighbors,
-    getValidDirections,
     getTileAtPosition,
 };

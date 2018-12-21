@@ -1,7 +1,7 @@
 class Point {
-    constructor(row, col) {
-        this.row = row;
-        this.col = col;
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
     }
 }
 
