@@ -69,14 +69,52 @@ function parseBoard(board) {
     return map;
 }
 
+function isWalkable(tile) {
+    return tile && tile.type === Types.Nothing;
+}
+
 function getValidNeighbors(map, currentPos) {
     var validNeighbors = [];
-    for (const direction of directions) {
-        const tileInDirection = getTileAtPosition(map, currentPos, direction);
-        if (tileInDirection && tileInDirection.type == Types.Nothing) {
-            validNeighbors.push(tileInDirection);
-        }
+    var print = new Array(3);
+    print[0] = new Array(3);
+    print[1] = new Array(3);
+    print[2] = new Array(3);
+    print[0][0] = "E";
+    print[1][1] = "P";
+    print[0][2] = "E";
+    print[2][0] = "E";
+    print[2][2] = "E";
+    var north = getTileAtPosition(map, currentPos, directionsEnum.NORTH);
+    if (isWalkable(north)) {
+        validNeighbors.push(north);
+        print[0][1] = "O";
+    } else {
+        print[0][1] = "X";
     }
+    var west = getTileAtPosition(map, currentPos, directionsEnum.WEST);
+    if (isWalkable(west)) {
+        validNeighbors.push(west);
+        print[1][0] = "O";
+    } else {
+        print[1][0] = "X";
+    }
+    var east = getTileAtPosition(map, currentPos, directionsEnum.EAST);
+    if (isWalkable(east)) {
+        validNeighbors.push(east);
+        print[1][2] = "O";
+    } else {
+        print[1][2] = "X";
+    }
+    var south = getTileAtPosition(map, currentPos, directionsEnum.SOUTH);
+    if (isWalkable(south)) {
+        validNeighbors.push(south);
+        print[2][1] = "O";
+    } else {
+        print[2][1] = "X";
+    }
+
+    console.log(print);
+
     return validNeighbors;
 }
 
