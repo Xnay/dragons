@@ -113,7 +113,8 @@ function getValidNeighbors(map, currentPos) {
         print[2][1] = "X";
     }
 
-    console.log(print);
+    //console.log(currentPos);
+    //console.log(print);
 
     return validNeighbors;
 }
