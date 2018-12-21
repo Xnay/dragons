@@ -11,7 +11,6 @@ const astar = require("./astar");
 var first = true;
 
 var ownedMinesPositions = [];
-var heroesLastTick = null;
 
 function bot(state, callback) {
     if (first) {
@@ -74,6 +73,12 @@ function bot(state, callback) {
     }
 
     console.log(dir);
+
+    if (path[0].tile.type === Types.Mine) {
+        if (!ownedMinesPositions.includes(path[0].tile.position)) {
+            ownedMinesPositions.push(path[0].tile.position);
+        }
+    }
 
     var ownedMinesMessage =
         "owned mines: count(" + ownedMinesPositions.length + "): ";
