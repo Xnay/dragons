@@ -21,7 +21,7 @@ function bot(state, callback) {
 
     var map = MapUtils.parseBoard(state.game.board);
     const currentPos = state.hero.pos;
-    var validDirections = MapUtils.getValidDirections(
+    var validNeighbors = MapUtils.getValidNeighbors(
         map,
         new Point(currentPos.x, currentPos.y)
     );
@@ -30,7 +30,7 @@ function bot(state, callback) {
     for (let hero of state.game.heroes) {
         let heroPosition = new Point(hero.pos.x, hero.pos.y);
 
-        if (map[heroPosition.row][heroPosition.col] == Types.Mine) {
+        if (map[heroPosition.x][heroPosition.y] == Types.Mine) {
             if (hero.id === state.hero.id) {
                 // si c'est le current player, ajouter au owned mines
                 if (!ownedMinesPositions.includes(heroPosition)) {
@@ -65,9 +65,12 @@ function bot(state, callback) {
     const dir =
         path.length > 0
             ? getDirectionForTile(currentPos, path[0].tile.position)
-            : validDirections[
-                  Math.floor(Math.random() * validDirections.length)
-              ];
+            : getDirectionForTile(
+                  currentPos,
+                  validNeighbors[
+                      Math.floor(Math.random() * validNeighbors.length)
+                  ].position
+              );
     if (path.length < 1) {
         console.log("ASTAR returned empty!");
     } else {
@@ -84,7 +87,7 @@ function bot(state, callback) {
         "owned mines: count(" + ownedMinesPositions.length + "): ";
     for (const ownedMinesPosition of ownedMinesPositions) {
         ownedMinesMessage +=
-            "(" + ownedMinesPosition.col + ", " + ownedMinesPosition.row + ") ";
+            "(" + ownedMinesPosition.x + ", " + ownedMinesPosition.y + ") ";
     }
 
     console.log(ownedMinesMessage);
@@ -93,8 +96,8 @@ function bot(state, callback) {
 }
 
 function getDirectionForTile(currentPos, targetPos) {
-    const x = targetPos.row - currentPos.x;
-    const y = targetPos.col - currentPos.y;
+    const x = targetPos.x - currentPos.x;
+    const y = targetPos.y - currentPos.y;
 
     if (x === 0 && y === 1) {
         return directionsEnum.EAST;
@@ -121,8 +124,8 @@ function findNearestPositionOfType(map, heroPosition, type) {
                     // filter out owned mines
                     for (const ownedMinePosition of ownedMinesPositions) {
                         if (
-                            ownedMinePosition.col === x &&
-                            ownedMinePosition.row === y
+                            ownedMinePosition.x === x &&
+                            ownedMinePosition.y === y
                         ) {
                             isOwnedMine = true;
                         }
@@ -143,8 +146,8 @@ function findNearestPositionOfType(map, heroPosition, type) {
     let i = 0;
     while (i < tiles.length) {
         let distance = Math.sqrt(
-            Math.pow(heroPosition.x - tiles[i].position.row, 2) +
-                Math.pow(heroPosition.y - tiles[i].position.col, 2)
+            Math.pow(heroPosition.x - tiles[i].position.x, 2) +
+                Math.pow(heroPosition.y - tiles[i].position.y, 2)
         );
         if (distance < minimumDistance) {
             minimumDistance = distance;
@@ -156,9 +159,9 @@ function findNearestPositionOfType(map, heroPosition, type) {
 
     console.log(
         "target:" +
-            nearestTile.position.row +
+            nearestTile.position.x +
             " " +
-            nearestTile.position.col +
+            nearestTile.position.y +
             " " +
             nearestTile.type
     );
