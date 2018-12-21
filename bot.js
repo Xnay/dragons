@@ -26,7 +26,23 @@ function bot(state, callback) {
     callback(null, dir);
 }
 
-function getTileAtPosition(currentPos, direction) {
+function getValidDirections(map, currentPos) {
+    var validDirections = [];
+    directions.forEach((direction, index) => {
+        const tileInDirection = getTileAtPosition(map, currentPos, direction);
+        if (tileInDirection === Types.Spike ||
+            tileInDirection === Types.Tree ||
+            tileInDirection === Types.Player) {
+                continue;
+        }
+        
+        validDirections.push(direction);
+    });
+
+    return validDirections;
+}
+
+function getTileAtPosition(map, currentPos, direction) {
     if (direction === "north") {
         return map[currentPos.x - 1][currentPos.y];
     } else if (direction === "south") {
