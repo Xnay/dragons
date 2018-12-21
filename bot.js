@@ -2,9 +2,11 @@ var open = require("open");
 
 var MapUtils = require("./map");
 var Types = require("./types");
+const Point = require("./point");
+const directions = require("./directions/directions");
 
-var directions = ["north", "south", "east", "west", "stay"];
 var first = true;
+
 function bot(state, callback) {
     if (first) {
         console.log("Open Browser at " + state.viewUrl);
@@ -13,12 +15,10 @@ function bot(state, callback) {
     }
 
     var map = MapUtils.parseBoard(state.game.board);
+    const currentPos = state.hero.pos;
+    var validDirections = getValidDirections(map, currentPos);
 
-    // Example how to use map and types
-    // const currentPos = state.hero.pos;
-    // if (map[currentPos.x + 1][currentPos.y] === Types.Mine) {
-    //     console.log("Gold to the south!!!!");
-    // }
+    var dir = validDirections[Math.floor(Math.random() * directions.length)];
 
     let nextTarget;
     if (state.hero.life < 50) {
@@ -27,8 +27,6 @@ function bot(state, callback) {
     } else {
         // find nearest mine
     }
-
-    var dir = directions[Math.floor(Math.random() * directions.length)];
     console.log(dir);
 
     callback(null, dir);
@@ -49,13 +47,14 @@ function getValidDirections(map, currentPos) {
     var validDirections = [];
     directions.forEach((direction, index) => {
         const tileInDirection = getTileAtPosition(map, currentPos, direction);
-        if (tileInDirection === Types.Spike ||
+        if (
+            tileInDirection === Types.Spike ||
             tileInDirection === Types.Tree ||
-            tileInDirection === Types.Player) {
-                continue;
+            tileInDirection === Types.Player
+        ) {
+        } else {
+            validDirections.push(direction);
         }
-        
-        validDirections.push(direction);
     });
 
     return validDirections;
