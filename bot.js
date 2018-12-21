@@ -70,15 +70,15 @@ function bot(state, callback) {
               ];
     if (path.length < 1) {
         console.log("ASTAR returned empty!");
+    } else {
+        if (path[0].tile.type === Types.Mine) {
+            if (!ownedMinesPositions.includes(path[0].tile.position)) {
+                ownedMinesPositions.push(path[0].tile.position);
+            }
+        }
     }
 
     console.log(dir);
-
-    if (path[0].tile.type === Types.Mine) {
-        if (!ownedMinesPositions.includes(path[0].tile.position)) {
-            ownedMinesPositions.push(path[0].tile.position);
-        }
-    }
 
     var ownedMinesMessage =
         "owned mines: count(" + ownedMinesPositions.length + "): ";
