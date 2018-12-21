@@ -1,29 +1,46 @@
 var MapUtils = require("./map");
+var Point = require("./point.js");
+const Tile = require("./tile");
+
+class Node {
+    constructor(tile) {
+        this.tile = tile;
+        this.f = 0;
+        this.g = 0;
+        this.h = 0;
+        this.cost = 1;
+        this.visited = false;
+        this.closed = false;
+        this.parent = null;
+    }
+}
 
 var astar = {
-    init: function(grid) {
-        for (var x = 0, xl = grid.length; x < xl; x++) {
-            for (var y = 0, yl = grid[x].length; y < yl; y++) {
-                var node = grid[x][y];
-                node.x = x;
-                node.y = y;
-                node.f = 0;
-                node.g = 0;
-                node.h = 0;
-                node.cost = 1;
-                node.visited = false;
-                node.closed = false;
-                node.parent = null;
+    init: function(map) {
+        var grid = [];
+        for (let x = 0; x < map.length; x++) {
+            for (let y = 0; y < map.length; y++) {
+                grid.push(new Node(new Tile(x, y, map[x][y])));
             }
         }
+        return grid;
     },
     heap: function() {
         return new BinaryHeap(function(node) {
             return node.f;
         });
     },
-    search: function(grid, start, end, heuristic) {
-        astar.init(grid);
+    search: function(map, startingTile, endingTile, heuristic) {
+        let grid = astar.init(map);
+        let start =
+            grid[
+                startingTile.position.row +
+                    map.length * startingTile.position.col
+            ];
+        let end =
+            grid[
+                endingTile.position.row + map.length * endingTile.position.col
+            ];
         heuristic = heuristic || astar.manhattan;
 
         var openHeap = astar.heap();
@@ -45,11 +62,18 @@ var astar = {
 
             currentNode.closed = true;
 
-            var neighbors = MapUtils.getValidNeighbors(grid, currentNode);
+            var neighbors = MapUtils.getValidNeighbors(
+                map,
+                new Point(
+                    currentNode.tile.position.row,
+                    currentNode.tile.position.col
+                )
+            );
 
             for (var i = 0; i < neighbors.length; i++) {
                 var tile = neighbors[i];
-                var neighbor = grid[tile.position.x][tile.position.y];
+                var neighbor =
+                    grid[tile.position.row + map.length * tile.position.col];
 
                 if (neighbor.closed) {
                     continue;
@@ -61,7 +85,9 @@ var astar = {
                 if (!beenVisited || gScore < neighbor.g) {
                     neighbor.visited = true;
                     neighbor.parent = currentNode;
-                    neighbor.h = neighbor.h || heuristic(neighbor.pos, end.pos);
+                    neighbor.h =
+                        neighbor.h ||
+                        heuristic(neighbor.tile.position, end.tile.position);
                     neighbor.g = gScore;
                     neighbor.f = neighbor.g + neighbor.h;
 
@@ -77,8 +103,8 @@ var astar = {
         return [];
     },
     manhattan: function(pos0, pos1) {
-        var d1 = Math.abs(pos1.x - pos0.x);
-        var d2 = Math.abs(pos1.y - pos0.y);
+        var d1 = Math.abs(pos1.row - pos0.row);
+        var d2 = Math.abs(pos1.col - pos0.col);
         return d1 + d2;
     },
 };

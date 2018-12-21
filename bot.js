@@ -19,7 +19,10 @@ function bot(state, callback) {
 
     var map = MapUtils.parseBoard(state.game.board);
     const currentPos = state.hero.pos;
-    var validDirections = MapUtils.getValidDirections(map, currentPos);
+    var validDirections = MapUtils.getValidDirections(
+        map,
+        new Point(currentPos.x, currentPos.y)
+    );
 
     let nextTarget;
     if (state.hero.life < 50) {
@@ -30,11 +33,39 @@ function bot(state, callback) {
         nextTarget = findNearestPositionOfType(map, currentPos, Types.Mine);
     }
 
-    var dir = astar.search(map, currentPos, nextTarget);
+    const path = astar.search(
+        map,
+        new Tile(currentPos.x, currentPos.y, map[currentPos.x][currentPos.y]),
+        nextTarget
+    );
+
+    if (path.length < 1) {
+        console.log("ASTAR returned empty!");
+    }
+
+    const dir = getDirectionForTile(currentPos, path[0].tile.position);
 
     console.log(dir);
 
     callback(null, dir);
+}
+
+function getDirectionForTile(currentPos, targetPos) {
+    const x = targetPos.row - currentPos.x;
+    const y = targetPos.col - currentPos.y;
+
+    if (x === 0 && y === 1) {
+        return directionsEnum.EAST;
+    } else if (x === 0 && y === -1) {
+        return directionsEnum.WEST;
+    } else if (x === 1 && y === 0) {
+        return directionsEnum.SOUTH;
+    } else if (x === -1 && y === 0) {
+        return directionsEnum.NORTH;
+    }
+
+    console.log("STAYING OH NO");
+    return directionsEnum.STAY;
 }
 
 function findNearestPositionOfType(map, heroPosition, type) {
