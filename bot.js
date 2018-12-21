@@ -3,9 +3,10 @@ var open = require("open");
 var MapUtils = require("./map");
 var Types = require("./types");
 const Point = require("./point");
-const directions = require("./directions");
+const directions = require("./directions/directions");
 
 var first = true;
+
 function bot(state, callback) {
     if (first) {
         console.log("Open Browser at " + state.viewUrl);
