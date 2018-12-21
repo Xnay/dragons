@@ -1,4 +1,7 @@
 var Types = require("./types");
+var Tile = require("./tile");
+const directions = require("./directions/directions");
+const directionsEnum = require("./directions/directions-enum");
 
 /* get type for a pair of char */
 function getType(a, b) {
@@ -40,7 +43,7 @@ function isTavern(a, b) {
 }
 
 /* magic map parsing */
-exports.parseBoard = function(board) {
+function parseBoard(board) {
     var map = [];
     var size = board.size;
 
@@ -64,4 +67,91 @@ exports.parseBoard = function(board) {
     }
 
     return map;
+}
+
+function getValidNeighbors(map, currentPos) {
+    var validNeighbors = [];
+    for (const direction of directions) {
+        const tileInDirection = getTileAtPosition(map, currentPos, direction);
+        if (
+            !tileInDirection ||
+            tileInDirection.type === Types.Spike ||
+            tileInDirection.type === Types.Tree ||
+            tileInDirection.type === Types.Player
+        ) {
+        } else {
+            validNeighbors.push(tileInDirection);
+        }
+    }
+    return validNeighbors;
+}
+
+function getValidDirections(map, currentPos) {
+    var validDirections = [];
+    for (const direction of directions) {
+        const tileInDirection = getTileAtPosition(map, currentPos, direction);
+        if (
+            !tileInDirection ||
+            tileInDirection.type === Types.Spike ||
+            tileInDirection.type === Types.Tree ||
+            tileInDirection.type === Types.Player
+        ) {
+        } else {
+            validDirections.push(direction);
+        }
+    }
+    return validDirections;
+}
+
+function getTileAtPosition(map, currentPos, direction) {
+    if (direction === directionsEnum.NORTH) {
+        if (currentPos.x == 0) {
+            return null;
+        }
+        return new Tile(
+            currentPos.x - 1,
+            currentPos.y,
+            map[currentPos.x - 1][currentPos.y]
+        );
+    } else if (direction === directionsEnum.SOUTH) {
+        if (currentPos.x == map.length) {
+            return null;
+        }
+        return new Tile(
+            currentPos.t + 1,
+            currentPos.y,
+            map[currentPos.x + 1][currentPos.y]
+        );
+    } else if (direction === directionsEnum.EAST) {
+        if (currentPos.y == map.length) {
+            return null;
+        }
+        return new Tile(
+            currentPos.x,
+            currentPos.y + 1,
+            map[currentPos.x][currentPos.y + 1]
+        );
+    } else if (direction === directionsEnum.WEST) {
+        if (currentPos.y == 0) {
+            return null;
+        }
+        return new Tile(
+            currentPos.x,
+            currentPos.y - 1,
+            map[currentPos.x][currentPos.y - 1]
+        );
+    } else if (direction === directionsEnum.STAY) {
+        return new Tile(
+            currentPos.x,
+            currentPos.y,
+            map[currentPos.x][currentPos.y]
+        );
+    }
+}
+
+module.exports = {
+    parseBoard,
+    getValidNeighbors,
+    getValidDirections,
+    getTileAtPosition,
 };
