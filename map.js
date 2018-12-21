@@ -69,15 +69,25 @@ function parseBoard(board) {
     return map;
 }
 
-function getValidNeighbors(map, currentPos) {
-    var validNeighbors = [];
+// The predicate takes a tile(neighbor) returns false if this neightbor is not wanted.
+function getNeightbors(map, currentPos, predicate) {
+    var neighbors = [];
+
     for (const direction of directions) {
         const tileInDirection = getTileAtPosition(map, currentPos, direction);
-        if (tileInDirection && tileInDirection.type == Types.Nothing) {
-            validNeighbors.push(tileInDirection);
+        if (predicate(tileInDirection)) {
+            neighbors.push(tileInDirection);
         }
     }
-    return validNeighbors;
+    return neighbors;
+}
+
+function getValidNeighbors(map, currentPos) {
+    return getNeightbors(
+        map,
+        currentPos,
+        tile => tile && tile.type == Types.Nothing
+    );
 }
 
 function getValidDirections(map, currentPos) {
@@ -139,6 +149,7 @@ function getTileAtPosition(map, currentPos, direction) {
 
 module.exports = {
     parseBoard,
+    getNeightbors,
     getValidNeighbors,
     getValidDirections,
     getTileAtPosition,

@@ -5,6 +5,7 @@ var Types = require("./types");
 const Point = require("./point");
 const Tile = require("./tile");
 const directions = require("./directions/directions");
+const DirectionUtils = require("./directions/direction-utils");
 const directionsEnum = require("./directions/directions-enum");
 const astar = require("./astar");
 
@@ -29,19 +30,24 @@ function bot(state, callback) {
     // détecter si une mine est prise
     for (let hero of state.game.heroes) {
         let heroPosition = new Point(hero.pos.x, hero.pos.y);
+        const heroMouvement = DirectionUtils.getMoveFromDirection(hero.lastDir);
+        // If the user is moving, check if he aquired a mine.
+        if (heroMouvement) {
+            if (
+                map[heroPosition.row + heroMouvement.x][
+                    heroPosition.col + heroMouvement.y
+                ] === Types.Mine
+            ) {
+                // Vérifier si on se fait voler notre mine.
+                if (hero.id !== state.hero.id) {
+                    // si c'est un enemy enlever des owned mines s'il l'est présentement
+                    var ownedMineIndex = ownedMinesPositions.indexOf(
+                        heroPosition
+                    );
 
-        if (map[heroPosition.row][heroPosition.col] == Types.Mine) {
-            if (hero.id === state.hero.id) {
-                // si c'est le current player, ajouter au owned mines
-                if (!ownedMinesPositions.includes(heroPosition)) {
-                    ownedMinesPositions.push(heroPosition);
-                }
-            } else {
-                // si c'est un enemy enlever des owned mines s'il l'est présentement
-                var ownedMineIndex = ownedMinesPositions.indexOf(heroPosition);
-
-                if (ownedMineIndex > -1) {
-                    ownedMinesPositions.splice(ownedMineIndex, 1);
+                    if (ownedMineIndex > -1) {
+                        ownedMinesPositions.splice(ownedMineIndex, 1);
+                    }
                 }
             }
         }
