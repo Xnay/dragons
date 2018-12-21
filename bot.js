@@ -11,6 +11,7 @@ const astar = require("./astar");
 var first = true;
 
 var ownedMinesPositions = [];
+var heroesLastTick = null;
 
 function bot(state, callback) {
     if (first) {
@@ -53,9 +54,20 @@ function bot(state, callback) {
         nextTarget = findNearestPositionOfType(map, currentPos, Types.Mine);
     }
 
-    var dir = astar.search(map, currentPos, nextTarget);
+    //var dir = astar.search(map, currentPos, nextTarget);
+    var dir =
+        validDirections[Math.floor(Math.random() * validDirections.length)];
 
     console.log(dir);
+
+    var ownedMinesMessage =
+        "owned mines: count(" + ownedMinesPositions.length + "): ";
+    for (const ownedMinesPosition of ownedMinesPositions) {
+        ownedMinesMessage +=
+            "(" + ownedMinesPosition.col + ", " + ownedMinesPosition.row + ") ";
+    }
+
+    console.log(ownedMinesMessage);
 
     callback(null, dir);
 }
@@ -67,9 +79,9 @@ function findNearestPositionOfType(map, heroPosition, type) {
             const currentType = map[x][y];
             if (currentType === type) {
                 if (type === Types.Mine) {
-                    var isOwnedMine = false;
+                    let isOwnedMine = false;
                     // filter out owned mines
-                    for (let ownedMinePosition of ownedMinesPositions) {
+                    for (const ownedMinePosition of ownedMinesPositions) {
                         if (
                             ownedMinePosition.col === x &&
                             ownedMinePosition.row === y
