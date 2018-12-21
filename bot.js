@@ -15,6 +15,14 @@ var ownedMinesPositions = [];
 var isAtTavern = false;
 
 function bot(state, callback) {
+    try {
+        doBot(state, callback);
+    } catch (err) {
+        callback(null, "stay");
+    }
+}
+
+function doBot(state, callback) {
     if (first) {
         console.log("Open Browser at " + state.viewUrl);
         open(state.viewUrl);
