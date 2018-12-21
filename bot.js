@@ -20,9 +20,28 @@ function bot(state, callback) {
     var validDirections = getValidDirections(map, currentPos);
 
     var dir = validDirections[Math.floor(Math.random() * directions.length)];
+
+    let nextTarget;
+    if (state.hero.life < 50) {
+        //find nearest tavern
+        nextTarget = nearestTavern;
+    } else {
+        // find nearest mine
+    }
     console.log(dir);
 
     callback(null, dir);
+}
+
+function findNearestPositionOfType(map, mapSize, heroPosition, type) {
+    let x = 0;
+    let y = 0;
+    let positions = [];
+    while (x < mapSize) {
+        while (y < mapSize) {}
+
+        mapSize++;
+    }
 }
 
 function getValidDirections(map, currentPos) {
