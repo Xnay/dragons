@@ -124,8 +124,8 @@ function findNearestPositionOfType(map, heroPosition, type) {
     let i = 0;
     while (i < tiles.length) {
         let distance = Math.sqrt(
-            Math.pow(heroPosition.x - tiles[i].position.col, 2) +
-                Math.pow(heroPosition.y - tiles[i].position.row, 2)
+            Math.pow(heroPosition.x - tiles[i].position.row, 2) +
+                Math.pow(heroPosition.y - tiles[i].position.col, 2)
         );
         if (distance < minimumDistance) {
             minimumDistance = distance;
