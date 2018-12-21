@@ -15,17 +15,10 @@ function bot(state, callback) {
     }
 
     var map = MapUtils.parseBoard(state.game.board);
+    const currentPos = state.hero.pos;
+    var validDirections = getValidDirections(map, currentPos);
 
-    // Exemple de création de point
-    const point = new Point(1, 2);
-
-    // Example how to use map and types
-    // const currentPos = state.hero.pos;
-    // if (map[currentPos.x + 1][currentPos.y] === Types.Mine) {
-    //     console.log("Gold to the south!!!!");
-    // }
-
-    var dir = directions[Math.floor(Math.random() * directions.length)];
+    var dir = validDirections[Math.floor(Math.random() * directions.length)];
     console.log(dir);
 
     callback(null, dir);
@@ -35,13 +28,14 @@ function getValidDirections(map, currentPos) {
     var validDirections = [];
     directions.forEach((direction, index) => {
         const tileInDirection = getTileAtPosition(map, currentPos, direction);
-        if (tileInDirection === Types.Spike ||
+        if (
+            tileInDirection === Types.Spike ||
             tileInDirection === Types.Tree ||
-            tileInDirection === Types.Player) {
-                continue;
+            tileInDirection === Types.Player
+        ) {
+        } else {
+            validDirections.push(direction);
         }
-        
-        validDirections.push(direction);
     });
 
     return validDirections;
