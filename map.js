@@ -90,7 +90,7 @@ function getValidNeighbors(map, currentPos) {
 }*/
 
 function isWalkable(tile) {
-    return tile && tile.type === Types.Nothing;
+    return tile && (tile.type === Types.Nothing || tile.type === Types.Spike);
 }
 
 function isNeighbor(currentTile, targetTile) {

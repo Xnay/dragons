@@ -33,10 +33,14 @@ function bot(state, callback) {
         const heroMouvement = DirectionUtils.getMoveFromDirection(hero.lastDir);
         // If the user is moving, check if he aquired a mine.
         if (heroMouvement) {
+            var x = heroPosition.x + heroMouvement.x;
+            var y = heroPosition.y + heroMouvement.y;
             if (
-                map[heroPosition.x + heroMouvement.x][
-                    heroPosition.y + heroMouvement.y
-                ] === Types.Mine
+                x >= 0 &&
+                x < map.length &&
+                y >= 0 &&
+                y < map.length &&
+                map[x][y] === Types.Mine
             ) {
                 // Vérifier si on se fait voler notre mine.
                 if (hero.id !== state.hero.id) {
