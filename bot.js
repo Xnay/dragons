@@ -58,7 +58,7 @@ function bot(state, callback) {
         }
     }
 
-    let nextTarget;
+    let nextTarget = null;
     if (state.hero.life < 50 || (isAtTavern && state.hero.life <= 90)) {
         //find nearest tavern
         nextTarget = findNearestPositionOfType(map, currentPos, Types.Tavern);
@@ -174,14 +174,17 @@ function findNearestPositionOfType(map, heroPosition, type) {
         i++;
     }
 
-    console.log(
-        "target:" +
-            nearestTile.position.x +
-            " " +
-            nearestTile.position.y +
-            " " +
-            nearestTile.type
-    );
+    if (nearestTile != null) {
+        console.log(
+            "target:" +
+                nearestTile.position.x +
+                " " +
+                nearestTile.position.y +
+                " " +
+                nearestTile.type
+        );
+    }
+
     return nearestTile;
 }
 
