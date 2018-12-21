@@ -105,46 +105,46 @@ function getValidDirections(map, currentPos) {
 
 function getTileAtPosition(map, currentPos, direction) {
     if (direction === directionsEnum.NORTH) {
-        if (currentPos.x == 0) {
+        if (currentPos.row == 0) {
             return null;
         }
         return new Tile(
-            currentPos.x - 1,
-            currentPos.y,
-            map[currentPos.x - 1][currentPos.y]
+            currentPos.row - 1,
+            currentPos.col,
+            map[currentPos.row - 1][currentPos.col]
         );
     } else if (direction === directionsEnum.SOUTH) {
-        if (currentPos.x == map.length) {
+        if (currentPos.row == map.length) {
             return null;
         }
         return new Tile(
-            currentPos.t + 1,
-            currentPos.y,
-            map[currentPos.x + 1][currentPos.y]
+            currentPos.row + 1,
+            currentPos.col,
+            map[currentPos.row + 1][currentPos.col]
         );
     } else if (direction === directionsEnum.EAST) {
-        if (currentPos.y == map.length) {
+        if (currentPos.col == map.length) {
             return null;
         }
         return new Tile(
-            currentPos.x,
-            currentPos.y + 1,
-            map[currentPos.x][currentPos.y + 1]
+            currentPos.row,
+            currentPos.col + 1,
+            map[currentPos.row][currentPos.col + 1]
         );
     } else if (direction === directionsEnum.WEST) {
-        if (currentPos.y == 0) {
+        if (currentPos.col == 0) {
             return null;
         }
         return new Tile(
-            currentPos.x,
-            currentPos.y - 1,
-            map[currentPos.x][currentPos.y - 1]
+            currentPos.row,
+            currentPos.col - 1,
+            map[currentPos.row][currentPos.col - 1]
         );
     } else if (direction === directionsEnum.STAY) {
         return new Tile(
-            currentPos.x,
-            currentPos.y,
-            map[currentPos.x][currentPos.y]
+            currentPos.row,
+            currentPos.col,
+            map[currentPos.row][currentPos.col]
         );
     }
 }
