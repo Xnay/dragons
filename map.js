@@ -73,6 +73,54 @@ function isWalkable(tile) {
     return tile && tile.type === Types.Nothing;
 }
 
+function isNeighbor(currentTile, targetTile) {
+    const x = Math.abs(currentTile.position.x - targetTile.position.x);
+    const y = Math.abs(currentTile.position.y - targetTile.position.y);
+
+    if (x === 1 && y === 0) {
+        return true;
+    }
+
+    if (x === 0 && y === 1) {
+        return true;
+    }
+
+    return false;
+}
+
+function isSamePosition(tile, end) {
+    return (
+        tile &&
+        tile.position &&
+        end &&
+        end.position &&
+        tile.position.x === end.position.x &&
+        tile.position.y === end.position.y
+    );
+}
+
+function getPath(map, currentPos, end) {
+    var validNeighbors = [];
+    var north = getTileAtPosition(map, currentPos, directionsEnum.NORTH);
+    if (isWalkable(north) || isSamePosition(north, end)) {
+        validNeighbors.push(north);
+    }
+    var west = getTileAtPosition(map, currentPos, directionsEnum.WEST);
+    if (isWalkable(west) || isSamePosition(west, end)) {
+        validNeighbors.push(west);
+    }
+    var east = getTileAtPosition(map, currentPos, directionsEnum.EAST);
+    if (isWalkable(east) || isSamePosition(east, end)) {
+        validNeighbors.push(east);
+    }
+    var south = getTileAtPosition(map, currentPos, directionsEnum.SOUTH);
+    if (isWalkable(south) || isSamePosition(south, end)) {
+        validNeighbors.push(south);
+    }
+
+    return validNeighbors;
+}
+
 function getValidNeighbors(map, currentPos) {
     var validNeighbors = [];
     var print = new Array(3);
@@ -167,6 +215,8 @@ function getTileAtPosition(map, currentPos, direction) {
 
 module.exports = {
     parseBoard,
+    isNeighbor,
+    getPath,
     getValidNeighbors,
     getTileAtPosition,
 };

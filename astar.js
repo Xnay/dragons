@@ -34,10 +34,10 @@ var astar = {
         let grid = astar.init(map);
         let start =
             grid[
-                startingTile.position.x + map.length * startingTile.position.y
+                startingTile.position.y + map.length * startingTile.position.x
             ];
         let end =
-            grid[endingTile.position.x + map.length * endingTile.position.y];
+            grid[endingTile.position.y + map.length * endingTile.position.x];
         heuristic = heuristic || astar.manhattan;
 
         var openHeap = astar.heap();
@@ -47,6 +47,10 @@ var astar = {
         while (openHeap.size() > 0) {
             var currentNode = openHeap.pop();
 
+            const targetIsValidNeighbor = MapUtils.isNeighbor(
+                currentNode.tile,
+                end.tile
+            );
             if (currentNode === end) {
                 var curr = currentNode;
                 var ret = [];
@@ -59,18 +63,19 @@ var astar = {
 
             currentNode.closed = true;
 
-            var neighbors = MapUtils.getValidNeighbors(
+            var neighbors = MapUtils.getPath(
                 map,
                 new Point(
                     currentNode.tile.position.x,
                     currentNode.tile.position.y
-                )
+                ),
+                endingTile
             );
 
             for (var i = 0; i < neighbors.length; i++) {
                 var tile = neighbors[i];
                 var neighbor =
-                    grid[tile.position.x + map.length * tile.position.y];
+                    grid[tile.position.y + map.length * tile.position.x];
 
                 if (neighbor.closed) {
                     continue;
