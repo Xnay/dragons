@@ -12,6 +12,7 @@ const astar = require("./astar");
 var first = true;
 
 var ownedMinesPositions = [];
+var isAtTavern = false;
 
 function bot(state, callback) {
     if (first) {
@@ -58,7 +59,7 @@ function bot(state, callback) {
     }
 
     let nextTarget;
-    if (state.hero.life < 50) {
+    if (state.hero.life < 50 || (isAtTavern && state.hero.life <= 90)) {
         //find nearest tavern
         nextTarget = findNearestPositionOfType(map, currentPos, Types.Tavern);
     } else {
@@ -88,6 +89,12 @@ function bot(state, callback) {
             if (!ownedMinesPositions.includes(path[0].tile.position)) {
                 ownedMinesPositions.push(path[0].tile.position);
             }
+        }
+
+        if (path[0].tile.type === Types.Tavern) {
+            isAtTavern = true;
+        } else {
+            isAtTavern = false;
         }
     }
 
