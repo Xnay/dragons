@@ -4,6 +4,7 @@ var MapUtils = require("./map");
 var Types = require("./types");
 const Point = require("./point");
 const directions = require("./directions/directions");
+const directionsEnum = require("./directions/directions-enum");
 
 var first = true;
 
@@ -45,7 +46,7 @@ function findNearestPositionOfType(map, mapSize, heroPosition, type) {
 
 function getValidDirections(map, currentPos) {
     var validDirections = [];
-    directions.forEach((direction, index) => {
+    for (const direction of directions) {
         const tileInDirection = getTileAtPosition(map, currentPos, direction);
         if (
             tileInDirection === Types.Spike ||
@@ -55,21 +56,20 @@ function getValidDirections(map, currentPos) {
         } else {
             validDirections.push(direction);
         }
-    });
-
+    }
     return validDirections;
 }
 
 function getTileAtPosition(map, currentPos, direction) {
-    if (direction === "north") {
+    if (direction === directionsEnum.NORTH) {
         return map[currentPos.x - 1][currentPos.y];
-    } else if (direction === "south") {
+    } else if (direction === directionsEnum.SOUTH) {
         return map[currentPos.x + 1][currentPos.y];
-    } else if (direction === "east") {
+    } else if (direction === directionsEnum.EAST) {
         return map[currentPos.x][currentPos.y + 1];
-    } else if (direction === "west") {
+    } else if (direction === directionsEnum.WEST) {
         return map[currentPos.x][currentPos.y - 1];
-    } else if (direction === "stay") {
+    } else if (direction === directionsEnum.STAY) {
         return map[currentPos.x][currentPos.y];
     }
 }
