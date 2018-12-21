@@ -63,11 +63,15 @@ function bot(state, callback) {
         nextTarget
     );
 
+    const dir =
+        path.length > 0
+            ? getDirectionForTile(currentPos, path[0].tile.position)
+            : validDirections[
+                  Math.floor(Math.random() * validDirections.length)
+              ];
     if (path.length < 1) {
         console.log("ASTAR returned empty!");
     }
-
-    const dir = getDirectionForTile(currentPos, path[0].tile.position);
 
     console.log(dir);
 
