@@ -105,7 +105,7 @@ function getValidDirections(map, currentPos) {
 
 function getTileAtPosition(map, currentPos, direction) {
     if (direction === directionsEnum.NORTH) {
-        if (currentPos.row == 0) {
+        if (currentPos.row <= 0) {
             return null;
         }
         return new Tile(
@@ -114,7 +114,7 @@ function getTileAtPosition(map, currentPos, direction) {
             map[currentPos.row - 1][currentPos.col]
         );
     } else if (direction === directionsEnum.SOUTH) {
-        if (currentPos.row == map.length) {
+        if (currentPos.row >= map.length) {
             return null;
         }
         return new Tile(
@@ -123,7 +123,7 @@ function getTileAtPosition(map, currentPos, direction) {
             map[currentPos.row + 1][currentPos.col]
         );
     } else if (direction === directionsEnum.EAST) {
-        if (currentPos.col == map.length) {
+        if (currentPos.col >= map.length) {
             return null;
         }
         return new Tile(
@@ -132,7 +132,7 @@ function getTileAtPosition(map, currentPos, direction) {
             map[currentPos.row][currentPos.col + 1]
         );
     } else if (direction === directionsEnum.WEST) {
-        if (currentPos.col == 0) {
+        if (currentPos.col <= 0) {
             return null;
         }
         return new Tile(
