@@ -68,6 +68,26 @@ function parseBoard(board) {
 
     return map;
 }
+// The predicate takes a tile(neighbor) returns false if this neightbor is not wanted.
+/*function getNeightbors(map, currentPos, predicate) {
+    var neighbors = [];
+
+    for (const direction of directions) {
+        const tileInDirection = getTileAtPosition(map, currentPos, direction);
+        if (predicate(tileInDirection)) {
+            neighbors.push(tileInDirection);
+        }
+    }
+    return neighbors;
+}
+
+function getValidNeighbors(map, currentPos) {
+    return getNeightbors(
+        map,
+        currentPos,
+        tile => tile && tile.type == Types.Nothing
+    );
+}*/
 
 function isWalkable(tile) {
     return tile && tile.type === Types.Nothing;
