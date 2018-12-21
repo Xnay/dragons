@@ -8,6 +8,8 @@ const directionsEnum = require("./directions/directions-enum");
 
 var first = true;
 
+var ownedMinesPositions = [];
+
 function bot(state, callback) {
     if (first) {
         console.log("Open Browser at " + state.viewUrl);
@@ -20,6 +22,14 @@ function bot(state, callback) {
     var validDirections = getValidDirections(map, currentPos);
 
     var dir = validDirections[Math.floor(Math.random() * directions.length)];
+
+    //gestion des owned mines
+    if (map[currentPos.x][currentPos.y] == Types.Mine) {
+        var playerPosition = new Point(currentPos.X, currentPos.Y);
+        if (!ownedMinesPositions.includes(playerPosition)) {
+            ownedMinesPositions.push(playerPosition);
+        }
+    }
 
     let nextTarget;
     if (state.hero.life < 50) {
