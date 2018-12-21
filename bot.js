@@ -45,5 +45,35 @@ function findNearestPositionOfType(map, mapSize, heroPosition, type) {
     }
 }
 
+function getValidDirections(map, currentPos) {
+    var validDirections = [];
+    directions.forEach((direction, index) => {
+        const tileInDirection = getTileAtPosition(map, currentPos, direction);
+        if (tileInDirection === Types.Spike ||
+            tileInDirection === Types.Tree ||
+            tileInDirection === Types.Player) {
+                continue;
+        }
+        
+        validDirections.push(direction);
+    });
+
+    return validDirections;
+}
+
+function getTileAtPosition(map, currentPos, direction) {
+    if (direction === "north") {
+        return map[currentPos.x - 1][currentPos.y];
+    } else if (direction === "south") {
+        return map[currentPos.x + 1][currentPos.y];
+    } else if (direction === "east") {
+        return map[currentPos.x][currentPos.y + 1];
+    } else if (direction === "west") {
+        return map[currentPos.x][currentPos.y - 1];
+    } else if (direction === "stay") {
+        return map[currentPos.x][currentPos.y];
+    }
+}
+
 module.exports = bot;
 if (require.main === module) require("./client/index").cli(bot);
