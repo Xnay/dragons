@@ -17,7 +17,7 @@ function bot(state, callback) {
 
     var map = MapUtils.parseBoard(state.game.board);
     const currentPos = state.hero.pos;
-    var validDirections = getValidDirections(map, currentPos);
+    var validDirections = MapUtils.getValidDirections(map, currentPos);
 
     var dir = validDirections[Math.floor(Math.random() * directions.length)];
 
@@ -41,36 +41,6 @@ function findNearestPositionOfType(map, mapSize, heroPosition, type) {
         while (y < mapSize) {}
 
         mapSize++;
-    }
-}
-
-function getValidDirections(map, currentPos) {
-    var validDirections = [];
-    for (const direction of directions) {
-        const tileInDirection = getTileAtPosition(map, currentPos, direction);
-        if (
-            tileInDirection === Types.Spike ||
-            tileInDirection === Types.Tree ||
-            tileInDirection === Types.Player
-        ) {
-        } else {
-            validDirections.push(direction);
-        }
-    }
-    return validDirections;
-}
-
-function getTileAtPosition(map, currentPos, direction) {
-    if (direction === directionsEnum.NORTH) {
-        return map[currentPos.x - 1][currentPos.y];
-    } else if (direction === directionsEnum.SOUTH) {
-        return map[currentPos.x + 1][currentPos.y];
-    } else if (direction === directionsEnum.EAST) {
-        return map[currentPos.x][currentPos.y + 1];
-    } else if (direction === directionsEnum.WEST) {
-        return map[currentPos.x][currentPos.y - 1];
-    } else if (direction === directionsEnum.STAY) {
-        return map[currentPos.x][currentPos.y];
     }
 }
 
