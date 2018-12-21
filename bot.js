@@ -23,11 +23,24 @@ function bot(state, callback) {
     const currentPos = state.hero.pos;
     var validDirections = MapUtils.getValidDirections(map, currentPos);
 
-    //gestion des owned mines
-    if (map[currentPos.x][currentPos.y] == Types.Mine) {
-        var playerPosition = new Point(currentPos.X, currentPos.Y);
-        if (!ownedMinesPositions.includes(playerPosition)) {
-            ownedMinesPositions.push(playerPosition);
+    // détecter si une mine est prise
+    for (let hero of state.game.heroes) {
+        let heroPosition = new Point(hero.pos.x, hero.pos.y);
+
+        if (map[heroPosition.row][heroPosition.col] == Types.Mine) {
+            if (hero.id === state.hero.id) {
+                // si c'est le current player, ajouter au owned mines
+                if (!ownedMinesPositions.includes(heroPosition)) {
+                    ownedMinesPositions.push(heroPosition);
+                }
+            } else {
+                // si c'est un enemy enlever des owned mines s'il l'est présentement
+                var ownedMineIndex = ownedMinesPositions.indexOf(heroPosition);
+
+                if (ownedMineIndex > -1) {
+                    ownedMinesPositions.splice(ownedMineIndex, 1);
+                }
+            }
         }
     }
 
@@ -53,7 +66,24 @@ function findNearestPositionOfType(map, heroPosition, type) {
         for (let y = 0; y < map.length; y++) {
             const currentType = map[x][y];
             if (currentType === type) {
-                tiles.push(new Tile(x, y, map[x][y]));
+                if (type === Types.Mine) {
+                    var isOwnedMine = false;
+                    // filter out owned mines
+                    for (let ownedMinePosition of ownedMinesPositions) {
+                        if (
+                            ownedMinePosition.col === x &&
+                            ownedMinePosition.row === y
+                        ) {
+                            isOwnedMine = true;
+                        }
+                    }
+
+                    if (!isOwnedMine) {
+                        tiles.push(new Tile(x, y, map[x][y]));
+                    }
+                } else {
+                    tiles.push(new Tile(x, y, map[x][y]));
+                }
             }
         }
     }
