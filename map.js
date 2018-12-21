@@ -73,13 +73,7 @@ function getValidNeighbors(map, currentPos) {
     var validNeighbors = [];
     for (const direction of directions) {
         const tileInDirection = getTileAtPosition(map, currentPos, direction);
-        if (
-            !tileInDirection ||
-            tileInDirection.type === Types.Spike ||
-            tileInDirection.type === Types.Tree ||
-            tileInDirection.type === Types.Player
-        ) {
-        } else {
+        if (tileInDirection && tileInDirection.type == Types.Nothing) {
             validNeighbors.push(tileInDirection);
         }
     }
@@ -90,13 +84,7 @@ function getValidDirections(map, currentPos) {
     var validDirections = [];
     for (const direction of directions) {
         const tileInDirection = getTileAtPosition(map, currentPos, direction);
-        if (
-            !tileInDirection ||
-            tileInDirection.type === Types.Spike ||
-            tileInDirection.type === Types.Tree ||
-            tileInDirection.type === Types.Player
-        ) {
-        } else {
+        if (tileInDirection && tileInDirection.type == Types.Nothing) {
             validDirections.push(direction);
         }
     }
