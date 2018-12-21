@@ -65,6 +65,7 @@ function findNearestPositionOfType(map, heroPosition, type) {
         i++;
     }
 
+    console.log("target:" + nearestPosition.row + nearestPosition.col);
     return nearestPosition;
 }
 
