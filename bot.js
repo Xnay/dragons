@@ -2,8 +2,9 @@ var open = require("open");
 
 var MapUtils = require("./map");
 var Types = require("./types");
+const Point = require("./point");
+const directions = require("./directions");
 
-var directions = ["north", "south", "east", "west", "stay"];
 var first = true;
 function bot(state, callback) {
     if (first) {
@@ -13,6 +14,9 @@ function bot(state, callback) {
     }
 
     var map = MapUtils.parseBoard(state.game.board);
+
+    // Exemple de création de point
+    const point = new Point(1, 2);
 
     // Example how to use map and types
     // const currentPos = state.hero.pos;
